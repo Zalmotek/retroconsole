@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=RetroArch Kiosk
+Comment=Launch RetroArch fullscreen on login, booting to the menu
+# Boot straight to the RetroArch menu (no -L). Preloading a content-required
+# core (e.g. snes9x) via -L makes RetroArch exit immediately when no ROM is
+# given ("core requires content"), dropping the kiosk to the desktop. The
+# menu's per-extension core association picks the right core per system.
+Exec=sh -c "xset s off; xset s noblank; xset -dpms; exec /usr/bin/retroarch --fullscreen"
+X-GNOME-Autostart-enabled=true
+NoDisplay=false
+Terminal=false

@@ -1,0 +1,11 @@
+# Gamepad button checker.
+#
+# Prints every button press/release to the Monitor with the gamepad role it
+# is mapped to in the game-console sketch (A/B/X/Y/Start/Select, D-pad, L1),
+# plus a startup roll call of which modules answer on the bus. Standalone —
+# no Bridge or Linux daemon needed.
+
+name: button-checker
+icon: 🎮
+ports: []
+bricks: []

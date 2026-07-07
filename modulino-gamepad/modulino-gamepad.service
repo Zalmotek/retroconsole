@@ -1,0 +1,15 @@
+[Unit]
+Description=Modulino Gamepad daemon (Bridge → uinput)
+After=multi-user.target arduino-router.service
+Requires=arduino-router.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/modulino-gamepad/gamepad_daemon.py
+Restart=on-failure
+RestartSec=3
+User=root
+Environment=PYTHONPATH=/opt/modulino-gamepad/lib
+
+[Install]
+WantedBy=multi-user.target

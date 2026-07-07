@@ -1,0 +1,10 @@
+# Qwiic / Wire1 I2C bus scanner.
+#
+# Prints every ACKing address to the Monitor every 2 seconds. Use it to
+# verify the Modulino chain (healthy console: 0x2C, 0x3E, 0x3F, 0x40) and
+# to "disarm" the MCU after running an address-changer sketch.
+
+name: bus-scanner
+icon: 🔍
+ports: []
+bricks: []

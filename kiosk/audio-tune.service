@@ -1,0 +1,16 @@
+# User service: applies tuned Imola-codec headphone audio settings.
+# Installed to ~/.config/systemd/user/ and enabled for the arduino user.
+# Bound to wireplumber.service (PartOf + WantedBy) so it re-runs every time
+# WirePlumber starts — WirePlumber resets the codec controls on each start.
+[Unit]
+Description=Tune Imola codec audio (jack mode from /etc/kiosk-audio-output)
+After=wireplumber.service
+Wants=wireplumber.service
+PartOf=wireplumber.service
+
+[Service]
+Type=oneshot
+ExecStart=/opt/modulino-gamepad/audio-tune.sh
+
+[Install]
+WantedBy=wireplumber.service

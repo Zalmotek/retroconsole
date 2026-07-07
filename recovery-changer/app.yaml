@@ -1,0 +1,11 @@
+# Modulino address-collision recovery tool.
+#
+# Fixes the "two (or more) Buttons modules on the same I2C address" state:
+# attach ONE module alone, set NEW_ADDR in sketch/sketch.ino to where that
+# module belongs (0x3E / 0x40; the module meant for 0x3F needs no run if
+# it's already there), press Run. See modulino-i2c-changer/README.md.
+
+name: recovery-changer
+icon: 🚑
+ports: []
+bricks: []

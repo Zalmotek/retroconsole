@@ -1,0 +1,12 @@
+[Unit]
+Description=Force USB-C port into host mode (so keyboards / hubs work)
+After=local-fs.target
+ConditionPathExists=/sys/devices/platform/soc@0/4ef8800.usb/4e00000.usb/usb_role/4e00000.usb-role-switch/role
+
+[Service]
+Type=oneshot
+ExecStart=/bin/sh -c "echo host > /sys/devices/platform/soc@0/4ef8800.usb/4e00000.usb/usb_role/4e00000.usb-role-switch/role"
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target

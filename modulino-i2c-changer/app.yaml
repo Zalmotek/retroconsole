@@ -1,0 +1,11 @@
+# Modulino I2C Address Changer
+#
+# Standalone Arduino App Lab project — does NOT need to live alongside the
+# game-console app. Use it once per unit (or per module that needs renumbering)
+# to move a Modulino's I2C address off its default so multiple modules of the
+# same type can share a Qwiic chain.
+
+name: modulino-i2c-changer
+icon: 🔧
+ports: []
+bricks: []

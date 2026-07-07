@@ -1,0 +1,17 @@
+[Unit]
+Description=Toggle Xorg rotation based on RetroArch state (menu = landscape via X, game = native portrait + RA-internal rotation, tear-free)
+After=lightdm.service
+PartOf=graphical.target
+
+[Service]
+Type=simple
+# Runs as root so it can read lightdm's root-owned X auth cookie. Only does
+# UDP loopback to RA + xrandr — no privileged ops beyond that.
+Environment=DISPLAY=:0
+Environment=XAUTHORITY=/var/run/lightdm/root/:0
+ExecStart=/usr/bin/python3 /opt/modulino-gamepad/ra-rotate-watcher.py
+Restart=on-failure
+RestartSec=2
+
+[Install]
+WantedBy=graphical.target

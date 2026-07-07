@@ -1,0 +1,11 @@
+[Unit]
+Description=Kiosk boot watchdog — restart lightdm if RetroArch doesn't come up
+After=lightdm.service
+Wants=lightdm.service
+
+[Service]
+Type=oneshot
+ExecStart=/opt/kiosk/kiosk-session-watchdog.sh
+
+[Install]
+WantedBy=graphical.target
