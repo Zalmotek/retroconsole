@@ -17,6 +17,9 @@
 #   4.  Install /opt/modulino-gamepad/gamepad_daemon.py + systemd unit
 #   5.  Drop the RetroArch udev gamepad autoconfig
 #   6.  Create ROM directories under ~/roms/{gb,gbc,gba,nes,snes,genesis}
+#   6a. Enable the Media Carrier + DSI panel via arduino-linux-config
+#       (default 8-dsi-touch-a, takes effect on reboot; no-op if already
+#       enabled; skip with KIOSK_DISPLAY=none for HDMI/bench setups)
 #   6c1. Install audio-tune user service (jack per /etc/kiosk-audio-output:
 #        headphones = demo console, earpiece = production speaker; select
 #        with KIOSK_AUDIO_OUTPUT=earpiece sudo bash setup.sh)
@@ -115,6 +118,28 @@ fi
 # -------- 6. ROM directories -------------------------------------------------
 echo "==> Creating ROM directories..."
 run_as_arduino mkdir -p "$ARDUINO_HOME"/roms/{gb,gbc,gba,nes,snes,genesis}
+
+# -------- 6a. Enable Media Carrier + DSI panel -------------------------------
+# A fresh image ships with the carrier disabled -> the panel stays dark and X
+# falls back to a 320x200 dummy framebuffer. arduino-linux-config composes the
+# carrier+panel DTB for the NEXT boot, so this lands on the same reboot as the
+# rest of the setup. Enabling the carrier reroutes the DSI lanes away from the
+# ANX7625 bridge, so HDMI-over-USB-C stops working (expected).
+# The rotation + touch configs below are specific to the 8" Touch A panel, so
+# its name is hard-coded; KIOSK_DISPLAY=none skips this step (HDMI/bench use).
+KIOSK_DISPLAY="${KIOSK_DISPLAY:-8-dsi-touch-a}"
+if [ "$KIOSK_DISPLAY" != "none" ]; then
+    if ! command -v arduino-linux-config >/dev/null 2>&1; then
+        echo "  WARNING: arduino-linux-config not found — update the OS via App Lab,"
+        echo "           then enable the panel manually:"
+        echo "           sudo arduino-linux-config carrier enable media-carrier display=$KIOSK_DISPLAY"
+    elif arduino-linux-config carrier show 2>/dev/null | grep -q "$KIOSK_DISPLAY"; then
+        echo "==> Media Carrier display already configured ($KIOSK_DISPLAY) — skipping"
+    else
+        echo "==> Enabling Media Carrier + $KIOSK_DISPLAY panel (takes effect on reboot)..."
+        arduino-linux-config carrier enable media-carrier display="$KIOSK_DISPLAY"
+    fi
+fi
 
 # -------- 6b. Rotate DSI panel into landscape -------------------------------
 # Waveshare 8-DSI-TOUCH-A is native 800x1280 portrait. Rotate left in Xorg so

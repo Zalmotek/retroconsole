@@ -89,31 +89,18 @@ files.
 ## Provisioning a Unit
 
 The console is built from three layers, each with its own deployment step. The
-order matters — Steps 2 and 3 both require the App Lab project to have been
-deployed at least once (Step 3) so the Arduino Router socket and the
-`python-apps-base` Docker container exist on the device.
+order matters — the Linux-side install (Step 4) requires the App Lab project
+to have been deployed at least once (Step 3) so the Arduino Router socket and
+the `python-apps-base` Docker container exist on the device.
 
-### 1. Flash the Arduino BSP image with Touch A support
+### 1. First boot in App Lab
 
-The Touch A DSI panel requires kernel 7.0.x+ with `CONFIG_DRM_PANEL_JADARD_JD9365DA_H3=m`
-and the carrier+panel DT overlays — only present in Arduino's BSP image dated
-`20260508-550` or later.
-
-a. Download the latest image (`arduino-unoq-debian-image-*.tar.zst`) from
-   Arduino.
-b. Put the Q into EDL mode: jumper **JCTL pin 1 (GND) ↔ pin 2 (USB_BOOT)**,
-   then plug USB-C into your workstation. JCTL is the 2×5 header at board
-   corner A1.
-c. On the workstation:
-   ```bash
-   curl -sLO https://github.com/arduino/arduino-flasher-cli/releases/latest/download/arduino-flasher-cli-0.5.1-linux-amd64.tar.gz
-   tar xzf arduino-flasher-cli-0.5.1-linux-amd64.tar.gz
-   sudo ./arduino-flasher-cli flash /path/to/arduino-unoq-debian-image-*.tar.zst -y
-   ```
-d. When flashing finishes: unplug, **remove the jumper**, replug.
-e. Complete the App Lab first-boot: set a device name and password, join
-   Wi-Fi, **enable SSH** in App Lab settings. The steps below assume the
-   device name `retroconsole` — substitute your own.
+Install the **latest Arduino App Lab** on your workstation, connect the UNO Q
+over USB-C, and complete the first-time setup: set a device name and password,
+join Wi-Fi, **enable SSH** in App Lab settings. If App Lab offers an OS
+update, take it — the current image ships the Touch A panel drivers and the
+`arduino-linux-config` carrier tool, so no manual image flashing is needed.
+The steps below assume the device name `retroconsole` — substitute your own.
 
 ### 2. Hardware preparation
 
@@ -165,10 +152,13 @@ sudo reboot
 After the reboot the Q autologs `arduino`, RetroArch starts fullscreen, the
 gamepad daemon is already running as a service, and the console is playable.
 
-### 5. Enable the DSI panel (native carrier config)
+### 5. DSI panel (enabled automatically by setup.sh)
 
-On BSP images that ship `arduino-linux-config` (the App Lab carrier tool),
-enable the Media Carrier + Touch A panel natively — no manual DTB hacking:
+`setup.sh` enables the Media Carrier + Touch A panel natively via
+`arduino-linux-config` (the App Lab carrier tool) — no manual DTB hacking.
+It is a no-op when the carrier is already configured, and can be skipped
+with `KIOSK_DISPLAY=none sudo bash setup.sh` (HDMI/bench setups). The change
+takes effect on the same reboot as the rest of the setup. Manual equivalent:
 
 ```bash
 sudo arduino-linux-config carrier enable media-carrier display=8-dsi-touch-a
