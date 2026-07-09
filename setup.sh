@@ -21,8 +21,8 @@
 #       (default 8-dsi-touch-a, takes effect on reboot; no-op if already
 #       enabled; skip with KIOSK_DISPLAY=none for HDMI/bench setups)
 #   6c1. Install audio-tune user service (jack per /etc/kiosk-audio-output:
-#        headphones = demo console, earpiece = production speaker; select
-#        with KIOSK_AUDIO_OUTPUT=earpiece sudo bash setup.sh)
+#        earpiece = enclosed-build speaker (default), headphones = bench/demo;
+#        select with KIOSK_AUDIO_OUTPUT=headphones sudo bash setup.sh)
 #   7.  Install the RetroArch fullscreen kiosk autostart (.desktop)
 #   8.  Append fullscreen + core-path overrides to retroarch.cfg
 #   9.  Configure lightdm autologin for the `arduino` user
@@ -178,16 +178,16 @@ systemctl enable kiosk-session-watchdog.service
 # WirePlumber starts. See kiosk/audio-tune.sh for the rationale.
 #
 # OUTPUT MODE: /etc/kiosk-audio-output selects the jack audio-tune.sh drives:
-#   headphones (default) -> MIC-IN/Headphones CTIA jack (demo console)
-#   earpiece             -> Earphones Out jack driving a bare 10.67-32 ohm
-#                           speaker (production arcades)
-# Select at provision time with:  KIOSK_AUDIO_OUTPUT=earpiece sudo bash setup.sh
+#   earpiece (default)   -> Earphones Out jack driving a bare 10.67-32 ohm
+#                           speaker (enclosed builds / production arcades)
+#   headphones           -> MIC-IN/Headphones CTIA jack (bench/demo use)
+# Select at provision time with:  KIOSK_AUDIO_OUTPUT=headphones sudo bash setup.sh
 # An existing mode file is preserved when the env var is not set.
 echo "==> Installing audio codec tuning service..."
 if [ -n "${KIOSK_AUDIO_OUTPUT:-}" ]; then
     echo "$KIOSK_AUDIO_OUTPUT" > /etc/kiosk-audio-output
 elif [ ! -f /etc/kiosk-audio-output ]; then
-    echo headphones > /etc/kiosk-audio-output
+    echo earpiece > /etc/kiosk-audio-output
 fi
 echo "==> Audio output mode: $(cat /etc/kiosk-audio-output)"
 

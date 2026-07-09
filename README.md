@@ -298,14 +298,15 @@ content loads / unloads. Installed by `setup.sh` as `ra-rotate-watcher.service`.
 ### Audio output modes
 
 `setup.sh` installs `audio-tune.service`, which re-applies codec tuning every
-time WirePlumber starts. Two output modes, selected by `/etc/kiosk-audio-output`:
+time WirePlumber starts. Two output modes, selected by `/etc/kiosk-audio-output`
+(an existing mode file is preserved on re-runs):
 
-- `headphones` (default) — stereo out on the Media Carrier's MIC-IN/Headphones
-  combo jack
-- `earpiece` — mono Class-AB earpiece amp driving a bare speaker, with a
-  stereo→mono downmix sink (`kiosk/51-earpiece-mono-sink.conf`); for enclosed
-  cabinet builds. Select at provision time:
-  `KIOSK_AUDIO_OUTPUT=earpiece sudo bash setup.sh`
+- `earpiece` (default) — mono Class-AB earpiece amp driving a bare speaker,
+  with a stereo→mono downmix sink (`kiosk/51-earpiece-mono-sink.conf`); for
+  the enclosed build
+- `headphones` — stereo out on the Media Carrier's MIC-IN/Headphones combo
+  jack; for bench builds. Select at provision time:
+  `KIOSK_AUDIO_OUTPUT=headphones sudo bash setup.sh`
 
 ### USB host mode
 
