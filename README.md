@@ -5,6 +5,9 @@ RetroArch for emulation with custom Modulino-based controls and an 8″ DSI
 touchscreen on the UNO Media Carrier. Boots straight into the game menu —
 no keyboard, no desktop.
 
+It optionally also plays the [ARC-AGI-3](#optional-arc-agi-3-puzzle-games)
+abstract-reasoning games, on the same gamepad.
+
 Full build write-up: see the project on Arduino Project Hub.
 
 ## Architecture
@@ -231,6 +234,30 @@ evtest /dev/input/event*                  # find 'Modulino Gamepad'
 | SNES | snes9x | Full speed |
 | Sega Genesis | genesis-plus-gx | Full speed |
 
+## Optional: ARC-AGI-3 puzzle games
+
+The console also runs the **ARC-AGI-3** benchmark — the interactive puzzle
+games the ARC Prize Foundation uses to measure abstract reasoning. The games
+give you no instructions at all: you work out the rules of each world by
+acting in it and reading what changes.
+
+```bash
+sudo bash install_arc_agi_3_player.sh
+```
+
+The installer clones the upstream [Pygame player][arc-upstream], patches it
+for a console with no keyboard, downloads the 25 games for offline play, and
+adds dock launchers for both apps. It parks the RetroArch autostart, so the
+two never fight for the display — you then tap either icon in the dock.
+
+The gamepad drives everything: D-pad moves, A interacts, B undoes, Y resets,
+Start opens the menu. The touchscreen covers the grid-click action.
+
+See [arc-agi-3/README.md](arc-agi-3/README.md) for the options, the full
+control map and how to restore the RetroArch kiosk.
+
+[arc-upstream]: https://github.com/aashen1/arc-agi-3-local-play
+
 ## Project Structure
 
 ```
@@ -258,7 +285,9 @@ evtest /dev/input/event*                  # find 'Modulino Gamepad'
 │   ├── usb-host-mode.service           # Forces USB-C to host mode at boot
 │   └── 99-kiosk.conf                   # sysctl: disable Magic SysRq
 ├── 3d/                                 # Enclosure — STL + editable sources
-└── setup/                              # Step-by-step guides (hardware focus)
+├── setup/                              # Step-by-step guides (hardware focus)
+├── install_arc_agi_3_player.sh         # Optional: ARC-AGI-3 puzzle games
+└── arc-agi-3/                          # Gamepad bridge, patcher, icon, dock entries
 ```
 
 ## Kiosk Architecture
