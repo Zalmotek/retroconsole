@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=RetroArch
+Comment=Start RetroArch fullscreen on the RetroConsole
+Exec=sh -c "xset s off; xset s noblank; xset -dpms; exec /usr/bin/retroarch --fullscreen"
+Icon=com.libretro.RetroArch
+Terminal=false
+StartupNotify=false
+Categories=Game;Emulator;

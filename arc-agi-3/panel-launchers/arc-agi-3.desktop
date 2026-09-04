@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Version=1.0
+Name=ARC-AGI-3
+Comment=Play the ARC-AGI-3 benchmark games with the Modulino gamepad
+Exec=/home/arduino/arc-play/console/arc-play.sh
+Icon=arc-agi-3
+Terminal=false
+StartupNotify=false
+Categories=Game;LogicGame;
