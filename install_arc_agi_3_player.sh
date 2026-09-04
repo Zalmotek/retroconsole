@@ -141,10 +141,14 @@ run_as_arduino gtk-update-icon-cache -f -t "$ICON_DIR" >/dev/null 2>&1 || true
 # hard to hit on the touchscreen.
 echo "==> Adding the dock launchers..."
 run_as_arduino install -d "$PANEL_DIR/launcher-20" "$PANEL_DIR/launcher-21"
-run_as_arduino install -m 644 \
-    "$ASSETS/panel-launchers/arc-agi-3.desktop" "$PANEL_DIR/launcher-20/"
+# The entry ships the default path, so point it at wherever APP_DIR really is.
+sed "s#^Exec=.*/console/arc-play.sh#Exec=$APP_DIR/console/arc-play.sh#" \
+    "$ASSETS/panel-launchers/arc-agi-3.desktop" \
+    > "$PANEL_DIR/launcher-20/arc-agi-3.desktop"
 run_as_arduino install -m 644 \
     "$ASSETS/panel-launchers/retroarch.desktop" "$PANEL_DIR/launcher-21/"
+chown "$ARDUINO_USER:$ARDUINO_USER" "$PANEL_DIR/launcher-20/arc-agi-3.desktop"
+chmod 644 "$PANEL_DIR/launcher-20/arc-agi-3.desktop"
 
 xfconf -c xfce4-panel -p /plugins/plugin-20 -n -t string -s launcher || true
 xfconf -c xfce4-panel -p /plugins/plugin-21 -n -t string -s launcher || true
